@@ -4,7 +4,7 @@ var cubeBufferInfo;
 var camPos = 30;
 var objpos = -40;
 var value = 0.6;
-var speed = 0.05;
+var speed = 0.003;
 
 objectList = []
 
@@ -24,7 +24,7 @@ async function main() {
   await obj.init()
   objectList.push(obj);
 
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 6; i++) {
     obj2 = new Mesh3D('src/mesh/cube.obj', [10, 0, -15 * i], 1, true)
     await obj2.init()
     objectList.push(obj2);
@@ -49,10 +49,13 @@ async function main() {
 
   function render(time) {
     
-    time *= 0.001;  // convert to seconds
-    camPos = (camPos - speed) % (value);
-    cameraPosition = [0, 2, camPos];
-
+    time *= speed;  // convert to seconds
+    
+    cameraPosition = [0, 2, -(time) % (value)];
+    flag = cameraPosition[2] > camPos
+    camPos = -(time) % (value);
+    console.log(camPos)
+    
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
@@ -85,11 +88,10 @@ async function main() {
 
     objectList.forEach(obj => {
       if (obj.moving) {
-        if (camPos == 0) obj.transforms.translateZ += value
+        if (flag) obj.transforms.translateZ += value
         if (obj.transforms.translateZ > 5) obj.transforms.translateZ = -30
         obj.transforms.scaleY = 1 - scaleSound / 512
       }
-
 
       u_world = computeMatrix(obj);
       for (const { bufferInfo, material } of obj.parts) {
