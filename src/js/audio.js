@@ -2,7 +2,7 @@ var analyser;
 var filter;
 var src;
 
-var scale = 1
+var scaleSound = 1;
 
 window.onload = function () {
 
@@ -49,7 +49,7 @@ window.onload = function () {
             analyser.getByteFrequencyData(dataArray);
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            scale = dataArray[2];
+            scaleSound = dataArray[2];
 
               for (var i = 0; i < bufferLength; i++) {                
                 barHeight = dataArray[i];

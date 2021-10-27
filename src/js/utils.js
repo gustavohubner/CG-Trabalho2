@@ -230,7 +230,7 @@ function computeMatrix(object) {
   // matrix = m4.yRotate(matrix, object.transforms.rotateY);
   // matrix = m4.zRotate(matrix, object.transforms.rotateZ);
 
-  // matrix = m4.scale(matrix, object.transforms.scaleX, object.transforms.scaleY, object.transforms.scaleZ);
+  matrix = m4.scale(matrix, object.transforms.scaleX, object.transforms.scaleY, object.transforms.scaleZ);
   // object.worldPosition = [matrix[12], matrix[13], matrix[14]];
   return matrix;
 
