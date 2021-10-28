@@ -1,7 +1,7 @@
 var gl
 
 var camPos = 30;
-var resetPos = -95;
+var resetPos = -55;
 var value = 0.6;
 var speed = 0.005;
 
@@ -21,11 +21,11 @@ async function main() {
   initAnaliser()
 
   const canvas = document.querySelector("#canvas");
-  canvas.addEventListener('click', function() {
+  canvas.addEventListener('click', function () {
     console.log("click")
     audio.paused ? audio.play() : audio.pause();
 
-   }, false);
+  }, false);
   gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -40,25 +40,26 @@ async function main() {
   obj = new Object3D(meshList[meshList.length - 1], [0, 0, 0], 1,)
   objectList.push(obj)
 
-  for (var i = 0; i < 5; i++) {
-    obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true, true)
+  // Paml Trees
+  for (var i = 0; i < 3; i++) {
+    obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true,false, true)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[6], [-4, 0, -20 * i -10], 1, true,)
+    obj2 = new Object3D(meshList[6], [-4, 0, -20 * i - 10], 1,true, false)
     objectList.push(obj2)
   }
 
-  for (var i = 0; i < 20; i++) {
+  // Buildings
+  for (var i = 0; i < 12; i++) {
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [8, 0, -5 * i], 1, true, true)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i -5], 1, true,)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i - 5], 1, true,)
     objectList.push(obj2)
 
   }
-
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 12; i++) {
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -5 * i], 2, true, true)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -5 * i -5], 2, true,)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -5 * i - 5], 2, true,)
     objectList.push(obj2)
 
   }
@@ -72,12 +73,12 @@ async function main() {
 
   let then = 0;
   function render(time) {
-    updateAudioData()
+    if (typeof context !== 'undefined') updateAudioData()
     now = time * 0.001;                          // convert to seconds
     const deltaTime = now - then;          // compute time since last frame
     then = now;                            // remember time for next frame
     const fps = 1 / deltaTime;             // compute frames per second
-    fpsElem.textContent = fps.toFixed(1);  // update fps display
+    fpsElem.textContent = fps.toFixed(2);  // update fps display
 
     time *= speed;
 
@@ -119,7 +120,9 @@ async function main() {
       if (obj.moving) {
         if (flag) obj.transforms.translateZ += value
         if (obj.transforms.translateZ > 5) obj.transforms.translateZ = resetPos
-        obj.transforms.scaleY = 1 - dataArray[index] / 512
+        if (typeof context !== 'undefined' && obj.soundAnim) {
+          obj.transforms.scaleY = obj.originalSize * (dataArray[index] / 255)
+        }
       }
 
       u_world = computeMatrix(obj);

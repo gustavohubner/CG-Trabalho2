@@ -13,17 +13,19 @@
 </head>
 
 <body>
-    
-    <canvas id="canvas" ></canvas>
+
+    <canvas id="canvas"></canvas>
     <div id="content">
         <input type="file" id="thefile" accept="audio/*" />
         <!-- <canvas id="canvas2"></canvas> -->
-        <audio id="audio" src="src/audio/rick.mp3" controls onplay="updateAudioData()"></audio>
+        <audio id="audio"  controls onplay="updateAudioData()">
+            <source src="src/audio/rick.mp3" type="audio/mpeg" preload="auto">
+        </audio>
         <span id="fps" style="color: white">0</span>
     </div>
 
-    <!-- Scripts -->   
-    <script src="src/js/audio.js"></script> 
+    <!-- Scripts -->
+    <script src="src/js/audio.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/twgl-full.min.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/m4.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/flattened-primitives.js"></script>
@@ -34,9 +36,9 @@
     <script src="src/js/gui.js"></script>
     <script src="src/js/obj.js"></script>
     <script src="src/js/script.js"></script>
-    
 
-    
+
+
 
 </body>
 

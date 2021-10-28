@@ -79,15 +79,19 @@ class Object3D {
   transforms;
   mesh
   moving = false;
+  originalSize = 1;
+  soundAnim;
 
-  constructor(mesh, position, scale, moving = false, flip = false) {
+  constructor(mesh, position, scale, moving = false, soundAnim = true, flip = false) {
     this.moving = moving;
     this.transforms = new Transformations;
-    this.mesh = mesh
-
+    this.mesh = mesh;
+    this.soundAnim = soundAnim;
+    
     this.transforms.scaleX = scale;
     this.transforms.scaleY = scale;
     this.transforms.scaleZ = scale;
+    this.originalSize = scale;
 
     this.transforms.translateX = position[0];
     this.transforms.translateY = position[1];

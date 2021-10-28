@@ -1,8 +1,8 @@
-var context = new AudioContext();
-var analyser = context.createAnalyser();
 var filter;
 var src;
 var dataArray;
+var analyser
+var context
 
 window.onload = function () {
 
@@ -27,19 +27,28 @@ window.onload = function () {
 };
 
 function updateAudioData() {
-    analyser.getByteFrequencyData(dataArray);
+    if (!context) {
+        console.log("CRIOOUUUUUUUU")
+        context = new AudioContext();
+        initAnaliser();
+    } else{
+        analyser.getByteFrequencyData(dataArray);
+    }
 }
 
 function initAnaliser() {
-    analyser.fftSize = 1024;
-    analyser.smoothingTimeConstant = 0.6
+    if (context) {
+        analyser = context.createAnalyser();
+        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.6
 
-    src = context.createMediaElementSource(audio);
-    analyser = context.createAnalyser();
-    var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
-    dataArray = new Uint8Array(bufferLength);
+        src = context.createMediaElementSource(audio);
+        analyser = context.createAnalyser();
+        var bufferLength = analyser.frequencyBinCount;
+        console.log(bufferLength);
+        dataArray = new Uint8Array(bufferLength);
 
-    src.connect(analyser);
-    analyser.connect(context.destination);
+        src.connect(analyser);
+        analyser.connect(context.destination);
+    }
 }
