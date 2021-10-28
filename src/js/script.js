@@ -121,7 +121,7 @@ async function main() {
         if (flag) obj.transforms.translateZ += value
         if (obj.transforms.translateZ > 5) obj.transforms.translateZ = resetPos
         if (typeof context !== 'undefined' && obj.soundAnim) {
-          obj.transforms.scaleY = obj.originalSize * (dataArray[index] / 255)
+          obj.transforms.scaleY = obj.originalSize + (dataArray[index] / 255)
         }
       }
 
