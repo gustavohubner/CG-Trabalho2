@@ -15,14 +15,15 @@
 <body>
 
     <canvas id="canvas"></canvas>
-    <div id="content">
+    <div id="content" class="center">
         <input type="file" id="thefile" accept="audio/*" />
         <!-- <canvas id="canvas2"></canvas> -->
-        <audio id="audio"  controls onplay="updateAudioData()">
+        <audio id="audio" controls onplay="updateAudioData()">
             <source src="src/audio/rick.mp3" type="audio/mpeg" preload="auto">
         </audio>
-        <span id="fps" style="color: white">0</span>
     </div>
+    <span id="fps" style="color: white" class="topRight">0</span>
+  
 
     <!-- Scripts -->
     <script src="src/js/audio.js"></script>

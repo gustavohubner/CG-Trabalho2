@@ -8,7 +8,7 @@ var speed = 0.005;
 objectList = []
 meshList = []
 
-cameraPosition = [0,2,0]
+cameraPosition = [0, 2, 0]
 var index = 2
 
 
@@ -95,11 +95,11 @@ async function main() {
     const deltaTime = now - then;          // compute time since last frame
     then = now;                            // remember time for next frame
     const fps = 1 / deltaTime;             // compute frames per second
-    fpsElem.textContent = fps.toFixed(2);  // update fps display
+    fpsElem.textContent = lerp(fpsElem.textContent, fps, 0.2).toFixed(1);  // update fps display
 
     time *= speed;
 
-    cameraPosition = [lerp(cameraPosition[0], camX,0.03), lerp(cameraPosition[1], camY, 0.03), -(time) % (value)];
+    cameraPosition = [lerp(cameraPosition[0], camX, 0.03), lerp(cameraPosition[1], camY, 0.03), -(time) % (value)];
     // console.log(camX, camY);
     flag = cameraPosition[2] > camPos
     camPos = -(time) % (value);
