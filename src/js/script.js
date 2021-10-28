@@ -1,17 +1,31 @@
 var gl
 
-var cubeBufferInfo;
 var camPos = 30;
-var objpos = -40;
+var resetPos = -95;
 var value = 0.6;
-var speed = 0.003;
+var speed = 0.005;
 
 objectList = []
+meshList = []
+
+var index = 2
+
+
+var fpsElem = document.getElementById("fps");
+// initAnaliser()
 
 async function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
+
+  initAnaliser()
+
   const canvas = document.querySelector("#canvas");
+  canvas.addEventListener('click', function() {
+    console.log("click")
+    audio.paused ? audio.play() : audio.pause();
+
+   }, false);
   gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -20,22 +34,34 @@ async function main() {
   // compiles and links the shaders, looks up attribute and uniform locations
   const meshProgramInfo = webglUtils.createProgramInfo(gl, [vs, fs]);
 
-  obj = new Mesh3D('src/mesh/plane.obj', [0, 0, 0], 1)
-  await obj.init()
-  objectList.push(obj);
+  await initMeshes()
+  console.log("ok!")
 
-  for (var i = 0; i < 6; i++) {
-    obj2 = new Mesh3D('src/mesh/cube.obj', [10, 0, -15 * i], 1, true)
-    await obj2.init()
-    objectList.push(obj2);
+  obj = new Object3D(meshList[meshList.length - 1], [0, 0, 0], 1,)
+  objectList.push(obj)
 
-    obj2 = new Mesh3D('src/mesh/cube.obj', [-10, 0, -10 * i], 1, true)
-    await obj2.init()
-    objectList.push(obj2);
+  for (var i = 0; i < 5; i++) {
+    obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true, true)
+    objectList.push(obj2)
+    obj2 = new Object3D(meshList[6], [-4, 0, -20 * i -10], 1, true,)
+    objectList.push(obj2)
   }
 
-  // obj2 = new Mesh3D('default')
-  // objectList.push(obj2);
+  for (var i = 0; i < 20; i++) {
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [8, 0, -5 * i], 1, true, true)
+    objectList.push(obj2)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i -5], 1, true,)
+    objectList.push(obj2)
+
+  }
+
+  for (var i = 0; i < 20; i++) {
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -5 * i], 2, true, true)
+    objectList.push(obj2)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -5 * i -5], 2, true,)
+    objectList.push(obj2)
+
+  }
 
 
   const cameraTarget = [0, 0, -10000];
@@ -43,19 +69,23 @@ async function main() {
   const zNear = 1;
   const zFar = 1000;
 
-  function degToRad(deg) {
-    return deg * Math.PI / 180;
-  }
 
+  let then = 0;
   function render(time) {
-    
-    time *= speed;  // convert to seconds
-    
+    updateAudioData()
+    now = time * 0.001;                          // convert to seconds
+    const deltaTime = now - then;          // compute time since last frame
+    then = now;                            // remember time for next frame
+    const fps = 1 / deltaTime;             // compute frames per second
+    fpsElem.textContent = fps.toFixed(1);  // update fps display
+
+    time *= speed;
+
     cameraPosition = [0, 2, -(time) % (value)];
     flag = cameraPosition[2] > camPos
     camPos = -(time) % (value);
-    console.log(camPos)
-    
+    // console.log(camPos)
+
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
@@ -72,7 +102,7 @@ async function main() {
     const view = m4.inverse(camera);
 
     const sharedUniforms = {
-      u_lightDirection: m4.normalize([-1, 3, 5]),
+      u_lightDirection: m4.normalize([0, 1, 1]),
       u_view: view,
       u_projection: projection,
       u_viewWorldPosition: cameraPosition,
@@ -85,23 +115,20 @@ async function main() {
     // calls gl.uniform
     webglUtils.setUniforms(meshProgramInfo, sharedUniforms);
 
-
     objectList.forEach(obj => {
       if (obj.moving) {
         if (flag) obj.transforms.translateZ += value
-        if (obj.transforms.translateZ > 5) obj.transforms.translateZ = -30
-        obj.transforms.scaleY = 1 - scaleSound / 512
+        if (obj.transforms.translateZ > 5) obj.transforms.translateZ = resetPos
+        obj.transforms.scaleY = 1 - dataArray[index] / 512
       }
 
       u_world = computeMatrix(obj);
-      for (const { bufferInfo, material } of obj.parts) {
-        // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+      for (const { bufferInfo, material } of obj.mesh.parts) {
         webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
-        // calls gl.uniform
         webglUtils.setUniforms(meshProgramInfo, {
           u_world,
         }, material);
-        // calls gl.drawArrays or gl.drawElements
+
         webglUtils.drawBufferInfo(gl, bufferInfo);
       }
     });

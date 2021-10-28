@@ -1,5 +1,4 @@
 const degToRad = (d) => (d * Math.PI) / 180;
-
 const radToDeg = (r) => (r * 180) / Math.PI;
 
 class Transformations {
@@ -19,16 +18,13 @@ class Transformations {
   constructor() { }
 }
 
-class Mesh3D {
-  obj;
+class Meshes {
+  objFile;
   objHref = '';
   parts = [];
 
   materials;
   bufferInfo;
-  transforms;
-
-  moving = false;
 
   defaultMaterial = {
     diffuse: [1, 1, 1],
@@ -38,9 +34,7 @@ class Mesh3D {
     opacity: 1,
   };
 
-  constructor(url, position, scale, moving = false) {
-    this.moving = moving;
-    this.transforms = new Transformations;
+  constructor(url) {
     this.objHref = url;
     if (url == "default") {
       this.parts.push({
@@ -48,31 +42,20 @@ class Mesh3D {
         bufferInfo: flattenedPrimitives.createCubeBufferInfo(gl, 20)
       })
     }
-
-    this.transforms.scaleX = scale;
-    this.transforms.scaleY = scale;
-    this.transforms.scaleZ = scale;
-
-    this.transforms.translateX = position[0];
-    this.transforms.translateY = position[1];
-    this.transforms.translateZ = position[2];
   }
 
   async init() {
     const response = await fetch(this.objHref);
     const text = await response.text();
-    this.obj = parseOBJ(text);
+    this.objFile = parseOBJ(text);
     const baseHref = new URL(this.objHref, window.location.href);
-    const matTexts = await Promise.all(this.obj.materialLibs.map(async filename => {
+    const matTexts = await Promise.all(this.objFile.materialLibs.map(async filename => {
       const matHref = new URL(filename, baseHref).href;
       const response = await fetch(matHref);
       return await response.text();
     }));
     this.materials = parseMTL(matTexts.join('\n'));
-
-
-
-    this.parts = this.obj.geometries.map(({ material, data }) => {
+    this.parts = this.objFile.geometries.map(({ material, data }) => {
       if (data.color) {
         if (data.position.length === data.color.length) {
           data.color = { numComponents: 3, data: data.color };
@@ -87,42 +70,35 @@ class Mesh3D {
         bufferInfo: this.bufferInfo,
       };
     });
-
-    // const extents =  this.getGeometriesExtents( this.obj.geometries);
-    // const range = m4.subtractVectors(extents.max, extents.min);
-    // // amount to move the object so its center is at the origin
-    // this.objOffset = m4.scaleVector(
-    //   m4.addVectors(
-    //     extents.min,
-    //     m4.scaleVector(range, 0.5)),
-    //   -1);
   }
 
-  // getExtents(positions) {
-  //   const min = positions.slice(0, 3);
-  //   const max = positions.slice(0, 3);
-  //   for (let i = 3; i < positions.length; i += 3) {
-  //     for (let j = 0; j < 3; ++j) {
-  //       const v = positions[i + j];
-  //       min[j] = Math.min(v, min[j]);
-  //       max[j] = Math.max(v, max[j]);
-  //     }
-  //   }
-  //   return { min, max };
-  // }
+}
 
-  // getGeometriesExtents(geometries) {
-  //   return geometries.reduce(({ min, max }, { data }) => {
-  //     const minMax =  this.getExtents(data.position);
-  //     return {
-  //       min: min.map((min, ndx) => Math.min(minMax.min[ndx], min)),
-  //       max: max.map((max, ndx) => Math.max(minMax.max[ndx], max)),
-  //     };
-  //   }, {
-  //     min: Array(3).fill(Number.POSITIVE_INFINITY),
-  //     max: Array(3).fill(Number.NEGATIVE_INFINITY),
-  //   });
-  // }
+
+class Object3D {
+  transforms;
+  mesh
+  moving = false;
+
+  constructor(mesh, position, scale, moving = false, flip = false) {
+    this.moving = moving;
+    this.transforms = new Transformations;
+    this.mesh = mesh
+
+    this.transforms.scaleX = scale;
+    this.transforms.scaleY = scale;
+    this.transforms.scaleZ = scale;
+
+    this.transforms.translateX = position[0];
+    this.transforms.translateY = position[1];
+    this.transforms.translateZ = position[2];
+
+    if (flip) {
+      this.transforms.rotateY = degToRad(180);
+      this.transforms.scaleZ = -1;
+    }
+
+  }
 }
 
 function parseOBJ(text) {
@@ -227,11 +203,31 @@ function computeMatrix(object) {
   );
 
   // matrix = m4.xRotate(matrix, object.transforms.rotateX);
-  // matrix = m4.yRotate(matrix, object.transforms.rotateY);
+  matrix = m4.yRotate(matrix, object.transforms.rotateY);
   // matrix = m4.zRotate(matrix, object.transforms.rotateZ);
 
   matrix = m4.scale(matrix, object.transforms.scaleX, object.transforms.scaleY, object.transforms.scaleZ);
   // object.worldPosition = [matrix[12], matrix[13], matrix[14]];
   return matrix;
+
+}
+
+async function initMeshes() {
+  models = [
+    'building01.obj',
+    'building02.obj',
+    'building03.obj',
+    'building04.obj',
+    'building05.obj',
+    'building06.obj',
+    'palmTree.obj',
+    'plane.obj'
+  ]
+
+  models.forEach(url => {
+    obj = new Meshes('src/mesh/' + url)
+    obj.init()
+    meshList.push(obj);
+  });
 
 }
