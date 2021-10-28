@@ -42,9 +42,9 @@ async function main() {
 
   // Paml Trees
   for (var i = 0; i < 3; i++) {
-    obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true,false, true)
+    obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true, false, true)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[6], [-4, 0, -20 * i - 10], 1,true, false)
+    obj2 = new Object3D(meshList[6], [-4, 0, -20 * i - 10], 1, true, false)
     objectList.push(obj2)
   }
 
@@ -54,20 +54,27 @@ async function main() {
     objectList.push(obj2)
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i - 5], 1, true,)
     objectList.push(obj2)
-
   }
-  for (var i = 0; i < 12; i++) {
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -5 * i], 2, true, true)
+  for (var i = 0; i < 6; i++) {
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -10 * i], 2, true, true)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -5 * i - 5], 2, true,)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -10 * i], 2, true,)
     objectList.push(obj2)
-
   }
+
+  for (var i = 0; i < 3; i++) {
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [20, 0, -20 * i], 3.5, true, true)
+    objectList.push(obj2)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-20, 0, -20 * i], 3.5, true)
+    objectList.push(obj2)
+  }
+
+  obj2 = new Object3D(meshList[7], [0, 0, -3], 1, true, false)
+  objectList.push(obj2)
 
 
   const cameraTarget = [0, 0, -10000];
-  var cameraPosition = [0, 2, camPos++ % 30]
-  const zNear = 1;
+  const zNear = 0.1;
   const zFar = 1000;
 
 
@@ -82,7 +89,8 @@ async function main() {
 
     time *= speed;
 
-    cameraPosition = [0, 2, -(time) % (value)];
+    cameraPosition = [camX, camY, -(time) % (value)];
+    // console.log(camX, camY);
     flag = cameraPosition[2] > camPos
     camPos = -(time) % (value);
     // console.log(camPos)

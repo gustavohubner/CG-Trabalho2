@@ -1,6 +1,8 @@
 const degToRad = (d) => (d * Math.PI) / 180;
 const radToDeg = (r) => (r * 180) / Math.PI;
 
+var camX = 0, camY = 2;
+
 class Transformations {
   rotateX = degToRad(0);
   rotateY = degToRad(0);
@@ -87,7 +89,7 @@ class Object3D {
     this.transforms = new Transformations;
     this.mesh = mesh;
     this.soundAnim = soundAnim;
-    
+
     this.transforms.scaleX = scale;
     this.transforms.scaleY = scale;
     this.transforms.scaleZ = scale;
@@ -225,7 +227,9 @@ async function initMeshes() {
     'building05.obj',
     'building06.obj',
     'palmTree.obj',
+    'freeway_sign.obj',
     'plane.obj'
+
   ]
 
   models.forEach(url => {
@@ -235,3 +239,19 @@ async function initMeshes() {
   });
 
 }
+
+
+document.addEventListener("keydown", event => {
+  if (event.keyCode == 87) { // W
+    if (camY < 8) camY+=0.05;
+  }
+  if (event.keyCode == 83) { // s
+    if (camY > 1) camY-=0.05;
+  }
+  if (event.keyCode == 65) { // a
+    if (camX > -5) camX-=0.05;
+  }
+  if (event.keyCode == 68) { // D
+    if (camX < 5) camX+=0.05;
+  }
+});
