@@ -8,6 +8,7 @@ var speed = 0.005;
 objectList = []
 meshList = []
 
+cameraPosition = [0,2,0]
 var index = 2
 
 
@@ -21,6 +22,14 @@ async function main() {
   initAnaliser()
 
   const canvas = document.querySelector("#canvas");
+
+  // var background = new Image();
+  // background.src = "src/rick.jpg";
+
+  // background.onload = () => {
+  //   canvas.getContext("webgl").drawImage(background, 0, 0, canvas.width, canvas.height);
+  // }
+
   canvas.addEventListener('click', function () {
     console.log("click")
     audio.paused ? audio.play() : audio.pause();
@@ -80,6 +89,7 @@ async function main() {
 
   let then = 0;
   function render(time) {
+
     if (typeof context !== 'undefined') updateAudioData()
     now = time * 0.001;                          // convert to seconds
     const deltaTime = now - then;          // compute time since last frame
@@ -89,7 +99,7 @@ async function main() {
 
     time *= speed;
 
-    cameraPosition = [camX, camY, -(time) % (value)];
+    cameraPosition = [lerp(cameraPosition[0], camX,0.03), lerp(cameraPosition[1], camY, 0.03), -(time) % (value)];
     // console.log(camX, camY);
     flag = cameraPosition[2] > camPos
     camPos = -(time) % (value);
@@ -118,7 +128,7 @@ async function main() {
     };
 
     gl.useProgram(meshProgramInfo.program);
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0.02, 0, 0.03, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // calls gl.uniform

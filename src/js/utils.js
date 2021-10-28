@@ -243,15 +243,26 @@ async function initMeshes() {
 
 document.addEventListener("keydown", event => {
   if (event.keyCode == 87) { // W
-    if (camY < 8) camY+=0.05;
+    if (camY < 8) camY += 0.3;
   }
   if (event.keyCode == 83) { // s
-    if (camY > 1) camY-=0.05;
+    if (camY > 1) camY -= 0.3;
   }
   if (event.keyCode == 65) { // a
-    if (camX > -5) camX-=0.05;
+    if (camX > -5) camX -= 0.3;
   }
   if (event.keyCode == 68) { // D
-    if (camX < 5) camX+=0.05;
+    if (camX < 5) camX += 0.3;
   }
 });
+
+document.addEventListener("mousemove", () => {
+  camX = ((event.clientX / gl.canvas.width) * 10) - 5; // Gets Mouse X
+  camY = ((1 - event.clientY / gl.canvas.height *2) * 7) + 1; // Gets Mouse Y
+  camY< 0.1 ? camY = 0.1: null
+  // console.log([mousex , mousey ]); // Prints data
+});
+
+function lerp (start, end, amt){
+  return (1-amt)*start+amt*end
+}
