@@ -46,7 +46,7 @@ async function main() {
   await initMeshes()
   console.log("ok!")
 
-  obj = new Object3D(meshList[meshList.length - 1], [0, 0, 0], 1,)
+  obj = new Object3D(meshList[meshList.length - 1], [0, 0.07, 0], 1,)
   objectList.push(obj)
 
   // Paml Trees

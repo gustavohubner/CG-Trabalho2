@@ -18,7 +18,7 @@ void main() {
   gl_Position = u_projection * u_view * worldPosition;
 
   // Modificado para efeito de Mundo curvado
-  gl_Position = vec4(gl_Position[0], gl_Position[1] + ((gl_Position[2] * gl_Position[2]) + (gl_Position[0] * gl_Position[0]))/10.0  , gl_Position[2], gl_Position[3]);
+  gl_Position = vec4(gl_Position[0], gl_Position[1] - ((gl_Position[2] * gl_Position[2]) + (gl_Position[0] * gl_Position[0]))/100.0  , gl_Position[2], gl_Position[3]);
   //gl_Position = vec4(gl_Position[0], gl_Position[1] - (gl_Position[2] * gl_Position[2])/100.0  , gl_Position[2], gl_Position[3]);
  
   v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
