@@ -59,22 +59,22 @@ async function main() {
 
   // Buildings
   for (var i = 0; i < 12; i++) {
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [8, 0, -5 * i], 1, true, true)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [8, 0, -5 * i], 1, true, true, false, 0)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i - 5], 1, true,)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i - 5], 1, true, true, false, 0)
     objectList.push(obj2)
   }
   for (var i = 0; i < 6; i++) {
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -10 * i], 2, true, true)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -10 * i], 2, true, true, false, 1)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -10 * i], 2, true,)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -10 * i], 2, true, true, false, 1)
     objectList.push(obj2)
   }
 
   for (var i = 0; i < 3; i++) {
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [20, 0, -20 * i], 3.5, true, true)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [20, 0, -20 * i], 3.5, true, true, false, 2)
     objectList.push(obj2)
-    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-20, 0, -20 * i], 3.5, true)
+    obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-20, 0, -20 * i], 3.5, true, true, false, 2)
     objectList.push(obj2)
   }
 
@@ -139,7 +139,7 @@ async function main() {
         if (flag) obj.transforms.translateZ += value
         if (obj.transforms.translateZ > 5) obj.transforms.translateZ = resetPos
         if (typeof context !== 'undefined' && obj.soundAnim) {
-          obj.transforms.scaleY = obj.originalSize + (dataArray[index] / 255)
+          obj.transforms.scaleY = lerp(obj.transforms.scaleY, obj.originalSize + soundScale[obj.band], 0.1)
         }
       }
 

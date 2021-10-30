@@ -3,6 +3,47 @@ const radToDeg = (r) => (r * 180) / Math.PI;
 
 var camX = 0, camY = 2;
 
+class Queue {
+  items = [];
+  limit = 10
+
+  constructor(limit = 10) {
+    this.limit = limit
+    this.items = new Array
+  }
+
+  enqueue(element) {
+    if (this.size() == this.limit) this.dequeue()
+    this.items.push(element);
+  }
+
+  dequeue() {
+    return this.items.shift();
+  }
+
+
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  size() {
+    return this.items.length;
+  }
+
+  print() {
+    console.log(this.items.toString());
+  }
+
+  avg() {
+    var sum = 0;
+    for (var i = 0; i < this.size(); i++) {
+      sum += this.items[i];
+    }
+    return sum / this.size();
+  }
+}
+
+
 class Transformations {
   rotateX = degToRad(0);
   rotateY = degToRad(0);
@@ -76,19 +117,20 @@ class Meshes {
 
 }
 
-
 class Object3D {
   transforms;
   mesh
   moving = false;
   originalSize = 1;
   soundAnim;
+  band;
 
-  constructor(mesh, position, scale, moving = false, soundAnim = true, flip = false) {
+  constructor(mesh, position, scale, moving = false, soundAnim = true, flip = false, band = 0) {
     this.moving = moving;
     this.transforms = new Transformations;
     this.mesh = mesh;
     this.soundAnim = soundAnim;
+    this.band = band
 
     this.transforms.scaleX = scale;
     this.transforms.scaleY = scale;
@@ -258,11 +300,19 @@ document.addEventListener("keydown", event => {
 
 document.addEventListener("mousemove", () => {
   camX = ((event.clientX / gl.canvas.width) * 10) - 5; // Gets Mouse X
-  camY = ((1 - event.clientY / gl.canvas.height *2) * 7) + 1; // Gets Mouse Y
-  camY< 0.1 ? camY = 0.1: null
+  camY = ((1 - event.clientY / gl.canvas.height * 2) * 7) + 1; // Gets Mouse Y
+  camY < 0.1 ? camY = 0.1 : null
   // console.log([mousex , mousey ]); // Prints data
 });
 
-function lerp (start, end, amt){
-  return (1-amt)*start+amt*end
+function lerp(start, end, amt) {
+  return (1 - amt) * start + amt * end
+}
+
+function sumArrayFromTo(array, begin, end){
+  var sum = 0
+  for (var i = begin; i < end; i++) {
+    sum+= array[i];
+  }
+  return sum;
 }
