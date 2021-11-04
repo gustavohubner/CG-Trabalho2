@@ -11,6 +11,7 @@ canvas {
 }
 
 /* #content {
+  display: block
   position: relative;
   z-index: 2;
 } */
@@ -19,9 +20,6 @@ canvas {
   position: fixed;
   margin: auto;
   width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: white;
   padding: 10px;
   z-index: 2;
@@ -37,13 +35,12 @@ canvas {
   right: 10px;
 }
 
-
-
 #thefile {
   /* position: fixed; */
   top: 10px;
   left: 10px;
-  z-index: 100;
+  width: 100%;
+  z-index: 2;
 }
 
 #canvas2 {

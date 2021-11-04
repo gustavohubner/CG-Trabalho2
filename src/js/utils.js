@@ -270,15 +270,16 @@ async function initMeshes() {
     'building06.obj',
     'palmTree.obj',
     'freeway_sign.obj',
-    'plane.obj'
-
+    'plane2.obj'
   ]
 
-  models.forEach(url => {
+  models.reverse().forEach(url => {
     obj = new Meshes('src/mesh/' + url)
     obj.init()
     meshList.push(obj);
   });
+
+  meshList = meshList.reverse()
 
 }
 
@@ -296,12 +297,16 @@ document.addEventListener("keydown", event => {
   if (event.keyCode == 68) { // D
     if (camX < 5) camX += 0.3;
   }
+  if (event.keyCode == 27) { // D
+    togglePlayer()
+  }
+
 });
 
 document.addEventListener("mousemove", () => {
   camX = ((event.clientX / gl.canvas.width) * 10) - 5; // Gets Mouse X
   camY = ((1 - event.clientY / gl.canvas.height * 2) * 7) + 1; // Gets Mouse Y
-  camY < 0.1 ? camY = 0.1 : null
+  camY < 0.5 ? camY = 0.5 : null
   // console.log([mousex , mousey ]); // Prints data
 });
 
@@ -309,10 +314,18 @@ function lerp(start, end, amt) {
   return (1 - amt) * start + amt * end
 }
 
-function sumArrayFromTo(array, begin, end){
+function sumArrayFromTo(array, begin, end) {
   var sum = 0
   for (var i = begin; i < end; i++) {
-    sum+= array[i];
+    sum += array[i];
   }
   return sum;
+}
+
+function togglePlayer() {
+  var player = document.getElementById("content");
+  if (player.style.visibility != "hidden")
+    player.style.visibility = "hidden"
+  else
+    player.style.visibility = ""
 }

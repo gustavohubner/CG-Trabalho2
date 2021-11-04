@@ -7,10 +7,12 @@ uniform mat4 u_projection;
 uniform mat4 u_view;
 uniform mat4 u_world;
 uniform vec3 u_viewWorldPosition;
+uniform vec3 u_curve;
 
 varying vec3 v_normal;
 varying vec3 v_surfaceToView;
 varying vec4 v_color;
+
 
 void main() {
   
@@ -18,8 +20,9 @@ void main() {
   gl_Position = u_projection * u_view * worldPosition;
 
   // Modificado para efeito de Mundo curvado
-  gl_Position = vec4(gl_Position[0], gl_Position[1] - ((gl_Position[2] * gl_Position[2]) + (gl_Position[0] * gl_Position[0]))/100.0  , gl_Position[2], gl_Position[3]);
-  //gl_Position = vec4(gl_Position[0], gl_Position[1] - (gl_Position[2] * gl_Position[2])/100.0  , gl_Position[2], gl_Position[3]);
+  
+  gl_Position = vec4(gl_Position[0] +  (gl_Position[3]*gl_Position[3])/50.0 * u_curve[0], gl_Position[1] - (((gl_Position[2] * gl_Position[2])* u_curve[1]) +( (gl_Position[0] * gl_Position[0]) * u_curve[2]))/50.0  , gl_Position[2], gl_Position[3]);
+  //gl_Position = vec4(gl_Position[0], gl_Position[1] - (gl_Position[2] * gl_Position[2])/100  , gl_Position[2], gl_Position[3]);
  
   v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
   v_normal = mat3(u_world) * a_normal;
