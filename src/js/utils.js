@@ -42,8 +42,6 @@ class Queue {
     return sum / this.size();
   }
 }
-
-
 class Transformations {
   rotateX = degToRad(0);
   rotateY = degToRad(0);
@@ -60,7 +58,6 @@ class Transformations {
   // // curveT = 0
   constructor() { }
 }
-
 class Meshes {
   objFile;
   objHref = '';
@@ -116,7 +113,6 @@ class Meshes {
   }
 
 }
-
 class Object3D {
   transforms;
   mesh
@@ -149,117 +145,49 @@ class Object3D {
   }
 }
 
-function parseOBJ(text) {
-  // because indices are base 1 let's just fill in the 0th data
-  const objPositions = [[0, 0, 0]];
-  const objTexcoords = [[0, 0]];
-  const objNormals = [[0, 0, 0]];
 
-  // same order as `f` indices
-  const objVertexData = [
-    objPositions,
-    objTexcoords,
-    objNormals,
-  ];
 
-  // same order as `f` indices
-  let webglVertexData = [
-    [],   // positions
-    [],   // texcoords
-    [],   // normals
-  ];
-
-  function newGeometry() {
-    // If there is an existing geometry and it's
-    // not empty then start a new one.
-    if (geometry && geometry.data.position.length) {
-      geometry = undefined;
-    }
-    setGeometry();
+document.addEventListener("keydown", event => {
+  if (event.keyCode == 87) { // W
+    if (camY < 8) camY += 0.3;
   }
-
-  function addVertex(vert) {
-    const ptn = vert.split('/');
-    ptn.forEach((objIndexStr, i) => {
-      if (!objIndexStr) {
-        return;
-      }
-      const objIndex = parseInt(objIndexStr);
-      const index = objIndex + (objIndex >= 0 ? 0 : objVertexData[i].length);
-      webglVertexData[i].push(...objVertexData[i][index]);
-    });
+  if (event.keyCode == 83) { // S
+    if (camY > 1) camY -= 0.3;
   }
-
-  const keywords = {
-    v(parts) {
-      objPositions.push(parts.map(parseFloat));
-    },
-    vn(parts) {
-      objNormals.push(parts.map(parseFloat));
-    },
-    vt(parts) {
-      // should check for missing v and extra w?
-      objTexcoords.push(parts.map(parseFloat));
-    },
-    f(parts) {
-      const numTriangles = parts.length - 2;
-      for (let tri = 0; tri < numTriangles; ++tri) {
-        addVertex(parts[0]);
-        addVertex(parts[tri + 1]);
-        addVertex(parts[tri + 2]);
-      }
-    },
-  };
-
-  const keywordRE = /(\w*)(?: )*(.*)/;
-  const lines = text.split('\n');
-  for (let lineNo = 0; lineNo < lines.length; ++lineNo) {
-    const line = lines[lineNo].trim();
-    if (line === '' || line.startsWith('#')) {
-      continue;
-    }
-    const m = keywordRE.exec(line);
-    if (!m) {
-      continue;
-    }
-    const [, keyword, unparsedArgs] = m;
-    const parts = line.split(/\s+/).slice(1);
-    const handler = keywords[keyword];
-    if (!handler) {
-      // console.warn('unhandled keyword:', keyword);  // eslint-disable-line no-console
-      continue;
-    }
-    handler(parts, unparsedArgs);
+  if (event.keyCode == 65) { // A
+    if (camX > -5) camX -= 0.3;
   }
+  if (event.keyCode == 68) { // D
+    if (camX < 5) camX += 0.3;
+  }
+  if (event.keyCode == 27) { // esc
+    toggleGUI()
+  }
+  if (event.keyCode == 32) { // space
+    audio.paused ? audio.play() : audio.pause();
+  }
+});
 
-  return {
-    position: webglVertexData[0],
-    texcoord: webglVertexData[1],
-    normal: webglVertexData[2],
-  };
+canvas.addEventListener("click", () => {
+  camX = ((event.clientX / gl.canvas.width) * 10) - 5; // Gets Mouse X
+  camY = ((1 - event.clientY / gl.canvas.height * 2) * 7) + 1; // Gets Mouse Y
+  camY < 0.5 ? camY = 0.5 : null
+  // console.log([mousex , mousey ]); // Prints data
+});
+
+
+
+
+function lerp(start, end, amt) {
+  return (1 - amt) * start + amt * end
 }
-
-function computeMatrix(object) {
-  var matrix = m4.identity();
-
-  // Aplica tranlação e rotação
-  matrix = m4.translate(
-    matrix,
-    object.transforms.translateX,
-    object.transforms.translateY,
-    object.transforms.translateZ
-  );
-
-  // matrix = m4.xRotate(matrix, object.transforms.rotateX);
-  matrix = m4.yRotate(matrix, object.transforms.rotateY);
-  // matrix = m4.zRotate(matrix, object.transforms.rotateZ);
-
-  matrix = m4.scale(matrix, object.transforms.scaleX, object.transforms.scaleY, object.transforms.scaleZ);
-  // object.worldPosition = [matrix[12], matrix[13], matrix[14]];
-  return matrix;
-
+function sumArrayFromTo(array, begin, end) {
+  var sum = 0
+  for (var i = begin; i < end; i++) {
+    sum += array[i];
+  }
+  return sum;
 }
-
 async function initMeshes() {
   models = [
     'building01.obj',
@@ -282,50 +210,54 @@ async function initMeshes() {
   meshList = meshList.reverse()
 
 }
-
-
-document.addEventListener("keydown", event => {
-  if (event.keyCode == 87) { // W
-    if (camY < 8) camY += 0.3;
-  }
-  if (event.keyCode == 83) { // s
-    if (camY > 1) camY -= 0.3;
-  }
-  if (event.keyCode == 65) { // a
-    if (camX > -5) camX -= 0.3;
-  }
-  if (event.keyCode == 68) { // D
-    if (camX < 5) camX += 0.3;
-  }
-  if (event.keyCode == 27) { // D
-    togglePlayer()
-  }
-
-});
-
-document.addEventListener("mousemove", () => {
-  camX = ((event.clientX / gl.canvas.width) * 10) - 5; // Gets Mouse X
-  camY = ((1 - event.clientY / gl.canvas.height * 2) * 7) + 1; // Gets Mouse Y
-  camY < 0.5 ? camY = 0.5 : null
-  // console.log([mousex , mousey ]); // Prints data
-});
-
-function lerp(start, end, amt) {
-  return (1 - amt) * start + amt * end
-}
-
-function sumArrayFromTo(array, begin, end) {
-  var sum = 0
-  for (var i = begin; i < end; i++) {
-    sum += array[i];
-  }
-  return sum;
-}
-
-function togglePlayer() {
+function toggleGUI() {
   var player = document.getElementById("content");
-  if (player.style.visibility != "hidden")
+  var settings = document.getElementById("settings");
+  if (player.style.visibility != "hidden") {
     player.style.visibility = "hidden"
-  else
+    settings.style.visibility = "hidden"
+  } else {
     player.style.visibility = ""
+    settings.style.visibility = ""
+  }
+}
+function updateValues(option) {
+  switch (option) {
+    case 1:
+      var speed1 = document.getElementById("speed")
+      speed = speed1.value / 10000
+      break;
+    case 2:
+      var colorSpeed = document.getElementById("colorSpeed")
+      colorChangeSpeed = colorSpeed.value / 10000
+      break;
+    case 3:
+      var spaceX = document.getElementById("spaceX")
+      var spaceY = document.getElementById("spaceY")
+      var spaceZ = document.getElementById("spaceZ")
+      curve = [spaceX.value, spaceY.value, spaceZ.value]
+      break;
+  }
+
+}
+function computeMatrix(object) {
+  var matrix = m4.identity();
+
+  // Aplica tranlação e rotação
+  matrix = m4.translate(
+    matrix,
+    object.transforms.translateX,
+    object.transforms.translateY,
+    object.transforms.translateZ
+  );
+
+  // not used
+  // matrix = m4.xRotate(matrix, object.transforms.rotateX);
+  matrix = m4.yRotate(matrix, object.transforms.rotateY);
+  // matrix = m4.zRotate(matrix, object.transforms.rotateZ);
+
+  matrix = m4.scale(matrix, object.transforms.scaleX, object.transforms.scaleY, object.transforms.scaleZ);
+
+  return matrix;
+
 }

@@ -17,24 +17,44 @@
     <canvas id="canvas"></canvas>
     <div id="content" class="center">
         <input type="file" id="thefile" accept="audio/*" />
-        <!-- <canvas id="canvas2"></canvas> -->
-        <br> aaaaaaaaaa
         <audio id="audio" controls onplay="updateAudioData()">
             <source src="src/audio/TakeOnMe.mp3" type="audio/mpeg" preload="auto">
         </audio>
     </div>
-    <span id="fps" style="color: white" class="topRight">0</span>
+
+
+
+    <div id="settings" class="topRight" style="color: white; font-size: smaller;">
+        <u><b>Settings:</b></u><br />
+        Speed:
+        <input type="range" min="1" max="100" value="50" id="speed" onchange="updateValues(1)" />
+        Color Speed:
+        <input type="range" min="0" max="100" value="50" id="colorSpeed" onchange="updateValues(2)" />
+        <br/>
+        <label for="autoCurve"> Auto-curve</label>
+        <input type="checkbox" id="autoCurve" name="autoCurve" checked=true>
+        <br/>
+        Space curvature (X, Y, Z):
+        <input type="number" step="0.1" value="0" id="spaceX" onchange="updateValues(3)">
+        <input type="number" step="0.1" value="0.5" id="spaceY" onchange="updateValues(3)">
+        <input type="number" step="0.1" value="0.5" id="spaceZ" onchange="updateValues(3)">
+        <br />
+        <br />
+        <u><b>Controls:</b></u><br />
+        <b>Esc:</b> Hide UI<br />
+        <b>Space:</b> Play/Stop music<br />
+        <b>Click:</b> Move camera<br />
+    </div>
+    <!-- <span id=" fps" style="color: white" class="topRight">0</span> -->
 
     <!-- Scripts -->
     <script src="src/js/audio.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/twgl-full.min.js"></script>
     <script src="https://webgl2fundamentals.org/webgl/resources/m4.js"></script>
-    <script src="https://webgl2fundamentals.org/webgl/resources/flattened-primitives.js"></script>
     <script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
-    <script src="src/lib/dat.gui.min.js"></script>
+    <!-- <script src="src/lib/dat.gui.min.js"></script> -->
     <script src="src/js/webgl.js"></script>
     <script src="src/js/utils.js"></script>
-    <script src="src/js/gui.js"></script>
     <script src="src/js/obj.js"></script>
     <script src="src/js/script.js"></script>
 

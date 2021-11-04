@@ -20,17 +20,24 @@ canvas {
   position: fixed;
   margin: auto;
   width: 50%;
-  background-color: white;
+  background-color: rgba(39, 39, 39, 0.905);
+  border-radius: 10px;
+  border: 2px solid aqua;
   padding: 10px;
-  z-index: 2;
+  z-index: 100;
   bottom: 10px;
   left: 25%;
 }
 
 .topRight {
-  z-index: 2;
+  position: fixed;
   margin: auto;
-  position: absolute;
+  width: 200px;
+  background-color: rgba(39, 39, 39, 0.905);
+  border-radius: 10px;
+  border: 2px solid aqua;
+  padding: 10px;
+  z-index: 100;
   top: 10px;
   right: 10px;
 }
@@ -51,9 +58,18 @@ canvas {
   height: 50%;
 }
 
+#thefile{
+  position: relative; 
+  top: 0 ; 
+  /* width: 75%;   */
+  /* left: 10px;  */
+  color: white;
+  padding-bottom: 10px;
+}
+
 audio {
   /* position: fixed; */
   left: 10px;
   bottom: 10px;
-  width: calc(100% - 20px);
+  width: 100%;
 }
