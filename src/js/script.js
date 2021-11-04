@@ -2,7 +2,7 @@ var gl
 
 var curve = [1, 0.5, 0.5];
 
-var camPos = 30;
+var camPos = 100;
 var resetPos = -55;
 var value = 0.6;
 var speed = 0.005;
@@ -39,7 +39,7 @@ async function main() {
   objectList.push(obj)
 
   // Paml Trees
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 4; i++) {
     obj2 = new Object3D(meshList[6], [4, 0, -20 * i], 1, true, false, true)
     objectList.push(obj2)
     obj2 = new Object3D(meshList[6], [-4, 0, -20 * i - 10], 1, true, false)
@@ -47,20 +47,20 @@ async function main() {
   }
 
   // Buildings
-  for (var i = 0; i < 12; i++) {
+  for (var i = 0; i < 16; i++) {
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [8, 0, -5 * i], 1, true, true, false, 0)
     objectList.push(obj2)
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-8, 0, -5 * i - 5], 1, true, true, false, 0)
     objectList.push(obj2)
   }
-  for (var i = 0; i < 6; i++) {
+  for (var i = 0; i < 8; i++) {
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [12, 0, -10 * i], 2, true, true, false, 1)
     objectList.push(obj2)
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-12, 0, -10 * i], 2, true, true, false, 1)
     objectList.push(obj2)
   }
 
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 4; i++) {
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [20, 0, -20 * i], 3.5, true, true, false, 2)
     objectList.push(obj2)
     obj2 = new Object3D(meshList[parseInt(Math.random() * 6)], [-20, 0, -20 * i], 3.5, true, true, false, 2)
@@ -88,13 +88,13 @@ async function main() {
     if (typeof meshList[8].parts[1] !== 'undefined') {
       meshList[8].parts[1].material.diffuse = [
         1 - Math.cos(time * colorChangeSpeed - 0.5),
-        1 + Math.cos(time * colorChangeSpeed + 0.5),
-        1 + Math.sin(time * colorChangeSpeed),
+        1 + Math.sin(0.9*time * colorChangeSpeed + 0.5),
+        1 + Math.sin(0.8*time * colorChangeSpeed),
       ]
       meshList[8].parts[3].material.diffuse = [
-        1 - Math.sin(time * colorChangeSpeed - 0.5),
+        1 - Math.sin(0.9*time * colorChangeSpeed - 0.5),
         1 + Math.sin(time * colorChangeSpeed + 0.5),
-        1 + Math.cos(time * colorChangeSpeed),
+        1 + Math.cos(0.8*time * colorChangeSpeed),
       ]
     }
 
@@ -107,9 +107,9 @@ async function main() {
       curve = [lerp(curve[0], 0.5 * (Math.sin(xx) + Math.sin(xx / 2) + Math.cos(2 * xx)), 0.005),curve[1], curve[2]]
 
     // move camera to click position
-    cameraPosition = [lerp(cameraPosition[0], camX, 0.03), lerp(cameraPosition[1], camY, 0.03), -(time) % (value)];
+    cameraPosition = [lerp(cameraPosition[0], camX, 0.03), lerp(cameraPosition[1], camY, 0.03), -(time) % (value) + 20];
     flag = cameraPosition[2] >= camPos
-    camPos = -(time) % (value);
+    camPos = -(time) % (value) +20;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -141,11 +141,11 @@ async function main() {
     objectList[0].transforms.scaleY = 1 + (soundScale[0] + soundScale[1] + 3 * soundScale[3]) / 3
     objectList[0].transforms.translateY = (objectList[0].transforms.scaleY - 0.5) / 10
 
-    objectList[49].transforms.scaleZ = 1 + (soundScale[0] + soundScale[1] + 3 * soundScale[3]) / 2
+    objectList[objectList.length-1].transforms.scaleZ = 1 + (soundScale[0] + soundScale[1] + 3 * soundScale[3]) / 2
     if (typeof objectList[49].mesh.parts[1] !== 'undefined') {
       objectList[49].mesh.parts[1].material.diffuse = [
-        1 + Math.sin((time / (2 * speed)) * colorChangeSpeed + 0.5),
-        1 - Math.sin((time / (2 * speed)) * colorChangeSpeed - 0.5),
+        1 + Math.sin(0.9*(time / (2 * speed)) * colorChangeSpeed + 0.5),
+        1 - Math.sin(0.8*(time / (2 * speed)) * colorChangeSpeed - 0.5),
         1 + Math.cos((time / (2 * speed)) * colorChangeSpeed),
       ]
     }
@@ -153,13 +153,13 @@ async function main() {
     objectList.forEach(obj => {
       if (obj.moving) {
         if (flag) obj.transforms.translateZ += value
-        if (obj.transforms.translateZ > 5) obj.transforms.translateZ = resetPos
+        if (obj.transforms.translateZ > 25) obj.transforms.translateZ = resetPos
         if (obj.soundAnim) {
 
           if (typeof obj.mesh.parts[1] !== 'undefined') {
             obj.mesh.parts[1].material.diffuse = [
-              1 + Math.sin((time / speed) * colorChangeSpeed + 0.5),
-              1 - Math.sin((time / speed) * colorChangeSpeed - 0.5),
+              1 + Math.sin((0.8*time / speed) * colorChangeSpeed + 0.5),
+              1 - Math.sin((0.9*time / speed) * colorChangeSpeed - 0.5),
               1 + Math.cos((time / speed) * colorChangeSpeed),
             ]
           }
