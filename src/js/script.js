@@ -142,8 +142,8 @@ async function main() {
     objectList[0].transforms.translateY = (objectList[0].transforms.scaleY - 0.5) / 10
 
     objectList[objectList.length-1].transforms.scaleZ = 1 + (soundScale[0] + soundScale[1] + 3 * soundScale[3]) / 2
-    if (typeof objectList[49].mesh.parts[1] !== 'undefined') {
-      objectList[49].mesh.parts[1].material.diffuse = [
+    if (typeof objectList[objectList.length-1].mesh.parts[1] !== 'undefined') {
+      objectList[objectList.length-1].mesh.parts[1].material.diffuse = [
         1 + Math.sin(0.9*(time / (2 * speed)) * colorChangeSpeed + 0.5),
         1 - Math.sin(0.8*(time / (2 * speed)) * colorChangeSpeed - 0.5),
         1 + Math.cos((time / (2 * speed)) * colorChangeSpeed),
