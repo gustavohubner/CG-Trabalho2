@@ -209,6 +209,7 @@ canvas.addEventListener("click", () => {
 
 function resetSun() {
   objectList2[0].transforms.translateX = 0
+  curve = [0, 0.4, 0.5]
 }
 
 function lerp(start, end, amt) {
