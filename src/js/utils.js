@@ -207,7 +207,7 @@ canvas.addEventListener("click", () => {
   // console.log([mousex , mousey ]); // Prints data
 });
 
-function resetSun() {
+function resetSunRoad() {
   objectList2[0].transforms.translateX = 0
   curve = [0, 0.4, 0.5]
 }
