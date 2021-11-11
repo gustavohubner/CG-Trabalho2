@@ -35,9 +35,9 @@ function updateAudioData() {
     } else {
         analyser.getByteFrequencyData(dataArray);
 
-        valBass = sumArrayFromTo(dataArray, 1, 3) / 20
+        valBass = sumArrayFromTo(dataArray, 1, 3) / 12
         valMid = sumArrayFromTo(dataArray, 200, 300) / 350
-        valHigh = sumArrayFromTo(dataArray, 480, 511) / 45
+        valHigh = sumArrayFromTo(dataArray, 480, 511) / 65
         valAll = sumArrayFromTo(dataArray, 0, 511) / 51200
 
         bassBuffer.enqueue(valBass);

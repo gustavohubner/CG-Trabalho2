@@ -18,7 +18,7 @@
     <div id="content" class="center">
         <input type="file" id="thefile" accept="audio/*" />
         <audio id="audio" controls onplay="updateAudioData()">
-            <source src="src/audio/TakeOnMe.mp3" type="audio/mpeg" preload="auto">
+            <source src="src/audio/rick.mp3" type="audio/mpeg" preload="auto">
         </audio>
     </div>
 
@@ -30,10 +30,16 @@
         <input type="range" min="1" max="100" value="50" id="speed" onchange="updateValues(1)" />
         Color Speed:
         <input type="range" min="0" max="100" value="50" id="colorSpeed" onchange="updateValues(2)" />
-        <br/>
+        <br />
         <label for="autoCurve"> Auto-curve</label>
-        <input type="checkbox" id="autoCurve" name="autoCurve" checked=true>
-        <br/>
+        <input type="checkbox" id="autoCurve" name="autoCurve">
+        <br />
+        <label for="autoCurve"> Move Sun</label>
+        <input type="checkbox" id="moveSun" name="moveSun">
+        <br />
+        <button onclick="resetSun()">Reset Sun</button>
+        <br />
+        <br />
         Space curvature (X, Y, Z):
         <input type="number" step="0.1" value="0" id="spaceX" onchange="updateValues(3)">
         <input type="number" step="0.1" value="0.5" id="spaceY" onchange="updateValues(3)">
