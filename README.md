@@ -6,4 +6,6 @@ Permite a seleção de músicas a partir de arquivos.
 
 O cenário é animado usando shaders para curvar/alterar escala.
 
+https://gustavohubner.github.io/VisualizadorMusicaWebGL/
+
 ![preview](media/pic.png)
