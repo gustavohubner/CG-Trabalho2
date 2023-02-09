@@ -5,3 +5,5 @@ Permite a seleção de músicas a partir de arquivos.
 É possivel também alterar alguns parâmetros referentes ao cenário, como velocidade, posição da cÂmera, troca de cores, curvatura do espaço, entre outras.
 
 O cenário é animado usando shaders para curvar/alterar escala.
+
+![preview](media/pic.png)
